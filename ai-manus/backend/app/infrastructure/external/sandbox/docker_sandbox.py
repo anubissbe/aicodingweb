@@ -86,8 +86,11 @@ class DockerSandbox(Sandbox):
         container_name = f"{name_prefix}-{str(uuid.uuid4())[:8]}"
         
         try:
-            # Create Docker client
-            docker_client = docker.from_env()
+            # Create Docker client with custom host if configured
+            if settings.docker_host:
+                docker_client = docker.DockerClient(base_url=settings.docker_host)
+            else:
+                docker_client = docker.from_env()
 
             # Prepare container configuration
             container_config = {
@@ -121,6 +124,24 @@ class DockerSandbox(Sandbox):
                 container_name=container_name
             )
             
+        except docker.errors.DockerException as e:
+            error_msg = (
+                f"Failed to create Docker sandbox: {str(e)}\n\n"
+                f"Possible causes:\n"
+                f"1. Docker daemon is not running\n"
+                f"2. Docker socket is not accessible (check permissions on /var/run/docker.sock)\n"
+                f"3. DOCKER_HOST environment variable is not set correctly\n\n"
+                f"Current configuration:\n"
+                f"- DOCKER_HOST: {settings.docker_host or 'Not set (using default)'}\n"
+                f"- SANDBOX_IMAGE: {settings.sandbox_image}\n\n"
+                f"To fix:\n"
+                f"1. Ensure Docker daemon is running: 'sudo systemctl start docker'\n"
+                f"2. Check socket permissions: 'ls -la /var/run/docker.sock'\n"
+                f"3. Set DOCKER_HOST in .env if using a custom location\n"
+                f"4. If running in Docker, ensure /var/run/docker.sock is mounted in docker-compose.yml"
+            )
+            logger.error(error_msg)
+            raise Exception(error_msg)
         except Exception as e:
             raise Exception(f"Failed to create Docker sandbox: {str(e)}")
 
@@ -470,7 +491,11 @@ class DockerSandbox(Sandbox):
             if self.client:
                 await self.client.aclose()
             if self.container_name:
-                docker_client = docker.from_env()
+                settings = get_settings()
+                if settings.docker_host:
+                    docker_client = docker.DockerClient(base_url=settings.docker_host)
+                else:
+                    docker_client = docker.from_env()
                 docker_client.containers.get(self.container_name).remove(force=True)
             return True
         except Exception as e:
@@ -557,10 +582,14 @@ class DockerSandbox(Sandbox):
             ip = await cls._resolve_hostname_to_ip(settings.sandbox_address)
             return DockerSandbox(ip=ip, container_name=id)
 
-        docker_client = docker.from_env()
+        if settings.docker_host:
+            docker_client = docker.DockerClient(base_url=settings.docker_host)
+        else:
+            docker_client = docker.from_env()
+
         container = docker_client.containers.get(id)
         container.reload()
-        
+
         ip_address = cls._get_container_ip(container)
         logger.info(f"IP address: {ip_address}")
         return DockerSandbox(ip=ip_address, container_name=id)
