@@ -95,7 +95,7 @@ export const TOOL_ICON_MAP: {[key: string]: any} = {
   "browser": BrowserIcon,
   "search": SearchIcon,
   "message": "",
-  "mcp": SearchIcon  // 暂时使用搜索图标，可以后续创建专门的MCP图标
+  "mcp": SearchIcon  // Temporarily using search icon, can create dedicated MCP icon later
 };
 
 import ShellToolView from '@/components/toolViews/ShellToolView.vue';

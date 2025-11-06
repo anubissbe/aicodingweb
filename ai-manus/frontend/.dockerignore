@@ -1,10 +1,10 @@
-# 依赖目录
+# Dependencies directory
 node_modules
 npm-debug.log
 yarn-debug.log
 yarn-error.log
 
-# 编辑器和IDE文件
+# Editor and IDE files
 .idea
 .vscode
 *.suo
@@ -13,16 +13,16 @@ yarn-error.log
 *.sln
 *.sw?
 
-# 构建输出
+# Build output
 dist
 dist-ssr
 coverage
 
-# 本地环境文件
+# Local environment files
 .env.local
 .env.*.local
 
-# 日志
+# Logs
 logs
 *.log
 npm-debug.log*
@@ -31,7 +31,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# 其他
+# Other
 .DS_Store
 .git
 .gitignore

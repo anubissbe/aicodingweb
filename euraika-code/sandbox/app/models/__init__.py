@@ -1,5 +1,5 @@
 """
-业务模型定义
+Business model definitions
 """
 from app.models.shell import ShellExecResult, ShellViewResult, ShellWaitResult, ShellWriteResult, ShellKillResult
 from app.models.supervisor import ProcessInfo, SupervisorActionResult, SupervisorTimeout

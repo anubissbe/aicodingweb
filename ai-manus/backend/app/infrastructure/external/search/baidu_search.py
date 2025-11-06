@@ -158,9 +158,9 @@ class BaiduSearchEngine(SearchEngine):
                 
                 # Extract total results count
                 total_results = 0
-                results_nums = soup.find_all(string=re.compile(r'百度为您找到相关结果约'))
+                results_nums = soup.find_all(string=re.compile(r'Baidu found approximately'))
                 if results_nums:
-                    match = re.search(r'约([\d,]+)个结果', results_nums[0])
+                    match = re.search(r'approximately ([\d,]+) results', results_nums[0])
                     if match:
                         try:
                             total_results = int(match.group(1).replace(',', ''))
@@ -199,7 +199,7 @@ if __name__ == "__main__":
     
     async def test():
         search_engine = BaiduSearchEngine()
-        result = await search_engine.search("Python 编程")
+        result = await search_engine.search("Python programming")
         
         if result.success:
             print(f"Search successful! Found {len(result.data.results)} results")
