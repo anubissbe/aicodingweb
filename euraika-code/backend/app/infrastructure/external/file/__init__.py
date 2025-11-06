@@ -1,4 +1,4 @@
-"""文件存储基础设施模块"""
+"""File storage infrastructure module"""
 
 from .gridfsfile import GridFSFileStorage
 
