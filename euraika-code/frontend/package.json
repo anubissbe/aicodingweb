@@ -22,7 +22,7 @@
     "lucide-vue-next": "^0.552.0",
     "marked": "^16.0.0",
     "mitt": "^3.0.1",
-    "monaco-editor": "^0.52.2",
+    "monaco-editor": "^0.54.0",
     "reka-ui": "^2.5.0",
     "tailwind-merge": "^3.0.0",
     "tw-animate-css": "^1.3.7",
