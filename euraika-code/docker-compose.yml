@@ -47,7 +47,7 @@ services:
       - euraika-network
 
   redis:
-    image: redis:7.0
+    image: redis:7.4
     restart: unless-stopped
     networks:
       - euraika-network
