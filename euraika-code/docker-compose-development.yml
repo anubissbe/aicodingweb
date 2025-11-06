@@ -1,0 +1,87 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - euraika-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - BACKEND_URL=http://backend:8000
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      - sandbox
+      - mongodb
+      - redis
+    restart: unless-stopped
+    volumes:
+      - ./backend:/app
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - euraika-network
+    env_file:
+      - .env
+
+  sandbox:
+    build:
+      context: ./sandbox
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+      - "5900:5900"
+      - "9222:9222"
+    restart: unless-stopped
+    volumes:
+      - ./sandbox:/app
+    networks:
+      - euraika-network
+
+  mongodb:
+    image: mongo:7.0
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    networks:
+      - euraika-network
+
+  redis:
+    image: redis:7.0
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - euraika-network
+
+  mockserver:
+    build:
+      context: ./mockserver
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    restart: unless-stopped
+    networks:
+      - euraika-network
+
+volumes:
+  mongodb_data:
+    name: euraika-mongodb-data-dev
+
+networks:
+  euraika-network:
+    name: euraika-network
+    driver: bridge
