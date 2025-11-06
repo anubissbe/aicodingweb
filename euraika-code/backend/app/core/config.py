@@ -35,6 +35,9 @@ class Settings(BaseSettings):
     sandbox_https_proxy: str | None = None
     sandbox_http_proxy: str | None = None
     sandbox_no_proxy: str | None = None
+
+    # Docker configuration
+    docker_host: str | None = None  # Docker daemon host (e.g., unix:///var/run/docker.sock or tcp://localhost:2375)
     
     # Search engine configuration
     search_provider: str | None = "bing"  # "baidu", "google", "bing"
