@@ -60,7 +60,7 @@ services:
       - euraika-network
 
   redis:
-    image: redis:7.0
+    image: redis:8.2
     restart: unless-stopped
     ports:
       - "6379:6379"
