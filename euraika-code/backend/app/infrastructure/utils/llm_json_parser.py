@@ -180,8 +180,7 @@ JSON:"""
         
         try:
             response = await self.llm.ask(
-                messages=messages,
-                response_format={"type": "json_object"}
+                messages=messages
             )
             
             content = response.get("content", "").strip()
