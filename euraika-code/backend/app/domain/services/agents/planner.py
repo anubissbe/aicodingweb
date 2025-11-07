@@ -36,7 +36,7 @@ class PlannerAgent(BaseAgent):
 
     name: str = "planner"
     system_prompt: str = SYSTEM_PROMPT + PLANNER_SYSTEM_PROMPT
-    format: Optional[str] = "json_object"
+    format: Optional[str] = None
     tool_choice: Optional[str] = "none"
 
     def __init__(
