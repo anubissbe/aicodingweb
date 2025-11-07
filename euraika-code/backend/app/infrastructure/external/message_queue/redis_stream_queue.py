@@ -97,8 +97,8 @@ class RedisStreamQueue(MessageQueue):
             Tuple[str, Any]: (Message ID, Message content), returns (None, None) if no message
         """
         logger.debug(f"Getting message from stream ({self._stream_name}): {start_id}")
-        # Handle None start_id by using "0" (read from beginning)
-        if start_id is None:
+        # Handle None or empty start_id by using "0" (read from beginning)
+        if not start_id:
             start_id = "0"
             
         # Read new messages

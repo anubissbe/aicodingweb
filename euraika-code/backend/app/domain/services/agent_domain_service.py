@@ -161,10 +161,10 @@ class AgentDomainService:
            
             while task and not task.done:
                 event_id, event_str = await task.output_stream.get(start_id=latest_event_id, block_ms=0)
-                latest_event_id = event_id
                 if event_str is None:
                     logger.debug(f"No event found in Session {session_id}'s event queue")
                     continue
+                latest_event_id = event_id
                 event = TypeAdapter(AgentEvent).validate_json(event_str)
                 event.id = event_id
                 logger.debug(f"Got event from Session {session_id}'s event queue: {type(event).__name__}")
